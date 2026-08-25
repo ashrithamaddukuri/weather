@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WeatherNow</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <div class="bg-animation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="container">
+
+    <header class="header">
+      <div class="logo">⛅ WeatherNow</div>
+      <div class="date-time" id="dateTime"></div>
+    </header>
+
+    <div class="search-section">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search city..." autocomplete="off" />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div id="suggestions" class="suggestions hidden"></div>
+    </div>
+
+    <div id="errorMsg" class="error-msg hidden">
+      <span>⚠️</span> City not found. Try another name.
+    </div>
+
+    <div id="weatherCard" class="weather-card hidden">
+      <div class="card-top">
+        <div class="location-info">
+          <h1 id="cityName">—</h1>
+          <p id="countryName">—</p>
+        </div>
+        <div class="weather-icon-wrap">
+          <div class="weather-emoji" id="weatherEmoji">🌤</div>
+          <p id="weatherDesc">—</p>
+        </div>
+      </div>
+
+      <div class="temp-section">
+        <span id="tempValue" class="temp-big">—</span>
+        <div class="temp-toggle">
+          <button class="unit-btn active" id="btnC" onclick="switchUnit('C')">°C</button>
+          <button class="unit-btn" id="btnF" onclick="switchUnit('F')">°F</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">💧</span>
+          <span class="stat-label">Humidity</span>
+          <span class="stat-value" id="humidity">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">💨</span>
+          <span class="stat-label">Wind</span>
+          <span class="stat-value" id="wind">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🌡️</span>
+          <span class="stat-label">Feels Like</span>
+          <span class="stat-value" id="feelsLike">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">👁️</span>
+          <span class="stat-label">Visibility</span>
+          <span class="stat-value" id="visibility">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🔼</span>
+          <span class="stat-label">Pressure</span>
+          <span class="stat-value" id="pressure">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">☀️</span>
+          <span class="stat-label">UV Index</span>
+          <span class="stat-value" id="uvIndex">—</span>
+        </div>
+      </div>
+
+      <div class="forecast-section">
+        <h3 class="section-title">5-Day Forecast</h3>
+        <div class="forecast-row" id="forecastRow"></div>
+      </div>
+
+      <div class="sun-section">
+        <h3 class="section-title">Sun Schedule</h3>
+        <div class="sun-row">
+          <div class="sun-item">
+            <span class="sun-icon">🌅</span>
+            <span class="sun-label">Sunrise</span>
+            <span class="sun-time" id="sunrise">—</span>
+          </div>
+          <div class="sun-track">
+            <div class="sun-progress" id="sunProgress"></div>
+            <div class="sun-dot" id="sunDot"></div>
+          </div>
+          <div class="sun-item">
+            <span class="sun-icon">🌇</span>
+            <span class="sun-label">Sunset</span>
+            <span class="sun-time" id="sunset">—</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="skeleton" class="skeleton-wrap hidden">
+      <div class="skeleton-card">
+        <div class="skel skel-title"></div>
+        <div class="skel skel-temp"></div>
+        <div class="skel skel-row"></div>
+      </div>
+    </div>
+
+    <div class="quick-cities">
+      <span class="quick-label">Quick pick:</span>
+      <button class="quick-btn" onclick="quickSearch('London')">🇬🇧 London</button>
+      <button class="quick-btn" onclick="quickSearch('Tokyo')">🇯🇵 Tokyo</button>
+      <button class="quick-btn" onclick="quickSearch('New York')">🗽 New York</button>
+      <button class="quick-btn" onclick="quickSearch('Dubai')">🇦🇪 Dubai</button>
+      <button class="quick-btn" onclick="quickSearch('Sydney')">🇦🇺 Sydney</button>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
