@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WeatherNow</title>
+  <title>WeatherNow · pro</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 </head>
@@ -22,6 +22,17 @@
       <div class="date-time" id="dateTime"></div>
     </header>
 
+    <!-- Location controls -->
+    <div class="location-bar">
+      <button class="loc-btn" id="locBtn" onclick="useMyLocation()">
+        <span>📍</span> Use my location
+      </button>
+      <button class="loc-btn" id="followBtn" onclick="toggleFollow()">
+        <span id="followDot" style="display:none;" class="loc-dot"></span>
+        <span id="followLabel">🔁 Follow me</span>
+      </button>
+    </div>
+
     <div class="search-section">
       <div class="search-box">
         <span class="search-icon">🔍</span>
@@ -31,9 +42,8 @@
       <div id="suggestions" class="suggestions hidden"></div>
     </div>
 
-    <div id="errorMsg" class="error-msg hidden">
-      <span>⚠️</span> City not found. Try another name.
-    </div>
+    <div id="errorMsg" class="error-msg hidden">⚠️ City not found. Try another name.</div>
+    <div id="alertBanner" class="alert-banner hidden"></div>
 
     <div id="weatherCard" class="weather-card hidden">
       <div class="card-top">
@@ -56,36 +66,20 @@
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-icon">💧</span>
-          <span class="stat-label">Humidity</span>
-          <span class="stat-value" id="humidity">—</span>
+        <div class="stat-card"><span class="stat-icon">💧</span><span class="stat-label">Humidity</span><span class="stat-value" id="humidity">—</span></div>
+        <div class="stat-card"><span class="stat-icon">💨</span><span class="stat-label">Wind</span><span class="stat-value" id="wind">—</span></div>
+        <div class="stat-card"><span class="stat-icon">🌡️</span><span class="stat-label">Feels Like</span><span class="stat-value" id="feelsLike">—</span></div>
+        <div class="stat-card"><span class="stat-icon">👁️</span><span class="stat-label">Visibility</span><span class="stat-value" id="visibility">—</span></div>
+        <div class="stat-card"><span class="stat-icon">🔼</span><span class="stat-label">Pressure</span><span class="stat-value" id="pressure">—</span></div>
+        <div class="stat-card"><span class="stat-icon">☀️</span><span class="stat-label">UV Index</span><span class="stat-value" id="uvIndex">—</span></div>
+      </div>
+
+      <!-- HOURLY FORECAST -->
+      <div class="hourly-section">
+        <div class="hourly-header">
+          <h3 class="section-title">Hourly Forecast · next 24h</h3>
         </div>
-        <div class="stat-card">
-          <span class="stat-icon">💨</span>
-          <span class="stat-label">Wind</span>
-          <span class="stat-value" id="wind">—</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🌡️</span>
-          <span class="stat-label">Feels Like</span>
-          <span class="stat-value" id="feelsLike">—</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">👁️</span>
-          <span class="stat-label">Visibility</span>
-          <span class="stat-value" id="visibility">—</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🔼</span>
-          <span class="stat-label">Pressure</span>
-          <span class="stat-value" id="pressure">—</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">☀️</span>
-          <span class="stat-label">UV Index</span>
-          <span class="stat-value" id="uvIndex">—</span>
-        </div>
+        <div class="hourly-scroll" id="hourlyScroll"></div>
       </div>
 
       <div class="forecast-section">
@@ -96,23 +90,17 @@
       <div class="sun-section">
         <h3 class="section-title">Sun Schedule</h3>
         <div class="sun-row">
-          <div class="sun-item">
-            <span class="sun-icon">🌅</span>
-            <span class="sun-label">Sunrise</span>
-            <span class="sun-time" id="sunrise">—</span>
-          </div>
-          <div class="sun-track">
-            <div class="sun-progress" id="sunProgress"></div>
-            <div class="sun-dot" id="sunDot"></div>
-          </div>
-          <div class="sun-item">
-            <span class="sun-icon">🌇</span>
-            <span class="sun-label">Sunset</span>
-            <span class="sun-time" id="sunset">—</span>
-          </div>
+          <div class="sun-item"><span class="sun-icon">🌅</span><span class="sun-label">Sunrise</span><span class="sun-time" id="sunrise">—</span></div>
+          <div class="sun-track"><div class="sun-progress" id="sunProgress"></div><div class="sun-dot" id="sunDot"></div></div>
+          <div class="sun-item"><span class="sun-icon">🌇</span><span class="sun-label">Sunset</span><span class="sun-time" id="sunset">—</span></div>
         </div>
       </div>
 
+      <div class="extra-details">
+        <div class="detail-item"><span class="detail-icon">🧭</span><span class="detail-label">Wind dir</span><span class="detail-value" id="windDir">—</span></div>
+        <div class="detail-item"><span class="detail-icon">☔</span><span class="detail-label">Precip.</span><span class="detail-value" id="precipitation">—</span></div>
+        <div class="detail-item"><span class="detail-icon">🍃</span><span class="detail-label">Air quality</span><span class="detail-value" id="airQuality">—</span></div>
+      </div>
     </div>
 
     <div id="skeleton" class="skeleton-wrap hidden">
@@ -133,6 +121,8 @@
     </div>
 
   </div>
+
+  <div class="toast" id="toast"></div>
 
   <script src="app.js"></script>
 </body>
